@@ -1,0 +1,99 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+             exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    
+    // Products Collection - Public read, Admin write
+    match /products/{productId} {
+      // Anyone can read products (for public website)
+      allow read: if true;
+      
+      // Only admins can create, update, or delete products
+      allow create, update, delete: if isAdmin();
+      
+      // Prices subcollection
+      match /prices/{priceId} {
+        // Anyone can read prices
+        allow read: if true;
+        
+        // Only admins and the price update cloud function can write
+        allow create, update: if isAdmin() || 
+                                  request.auth.token.admin == true;
+        allow delete: if isAdmin();
+      }
+    }
+    
+    // Categories Collection - Public read, Admin write
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // Sliders Collection - Public read, Admin write
+    match /sliders/{sliderId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // API Configs Collection - Admin only (sensitive data)
+    match /api_configs/{configId} {
+      allow read, write: if isAdmin();
+    }
+    
+    // Analytics Collection - Write from anywhere (for tracking), Admin read
+    match /analytics/{analyticsId} {
+      // Allow writes for click tracking (from client)
+      allow create: if true;
+      
+      // Only admins can read analytics
+      allow read: if isAdmin();
+      
+      // Only admins can update or delete
+      allow update, delete: if isAdmin();
+    }
+    
+    // SEO Settings Collection - Public read, Admin write
+    match /seo_settings/{seoId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // Admins Collection - Admin only
+    match /admins/{adminId} {
+      // Admins can only read their own document
+      allow read: if isAuthenticated() && request.auth.uid == adminId;
+      
+      // Only existing admins can create new admins
+      allow create: if isAdmin();
+      
+      // Admins can update their own profile, but not delete
+      allow update: if isAuthenticated() && request.auth.uid == adminId;
+      allow delete: if false; // Prevent accidental admin deletion
+    }
+    
+    // System Logs Collection - Admin read, Server write
+    match /system_logs/{logId} {
+      // Only admins can read system logs
+      allow read: if isAdmin();
+      
+      // Only server (cloud functions) can write logs
+      allow create: if request.auth.token.admin == true;
+      allow update, delete: if isAdmin();
+    }
+    
+    // Default deny all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

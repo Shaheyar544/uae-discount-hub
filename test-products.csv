@@ -1,0 +1,6 @@
+title,brand,description,category,image_url,price,specs_display,specs_processor,specs_ram,pros_1,pros_2,pros_3,cons_1,cons_2
+Samsung Galaxy S24 Ultra,Samsung,"Flagship smartphone with 6.8-inch AMOLED display, S Pen, and advanced AI features",smartphones,https://example.com/s24.jpg,1199,"6.8-inch AMOLED",Snapdragon 8 Gen 3,12GB,Amazing camera quality,Long battery life,Premium build quality,Very expensive,Heavy device
+MacBook Pro M3,Apple,"Professional laptop with M3 chip, stunning Retina display, and all-day battery life",laptops,https://example.com/macbook.jpg,1999,"14-inch Retina",Apple M3,16GB,Incredible performance,Great battery life,Beautiful display,Limited ports,Expensive
+Sony WH-1000XM5,Sony,"Industry-leading noise-canceling headphones with premium sound quality",audio,https://example.com/sony.jpg,399,"Over-ear design",N/A,N/A,Best noise cancellation,Comfortable,Great sound quality,Expensive,Not foldable
+Dell XPS 13,Dell,"Compact ultrabook with InfinityEdge display",laptops,https://example.com/dell.jpg,1299,"13.4-inch FHD+",Intel Core i7,16GB,Portable design,Good performance,Long battery,Limited upgradeability,No USB-A ports
+AirPods Pro 2,Apple,"Premium wireless earbuds with active noise cancellation",audio,https://example.com/airpods.jpg,249,"In-ear design",Apple H2,N/A,Excellent ANC,Great integration,Comfortable,Expensive,Short battery life
